@@ -2,7 +2,7 @@
 .vscode
 .idea
 
-build
+build*
 CMakeFiles
 cmakefiles_*
 
