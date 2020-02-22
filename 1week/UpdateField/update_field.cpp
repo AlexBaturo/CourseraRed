@@ -30,7 +30,6 @@ istream& operator >> (istream& is, Time& r)
    return is;
 }
 
-
 bool operator == (const Date& lsh, const Date& rsh)
 {
     return (lsh.year == rsh.year) && (lsh.month == rsh.month) && (lsh.day == rsh.day);
