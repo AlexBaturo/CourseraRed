@@ -3,7 +3,54 @@
 
 using namespace std;
 
-#define UPDATE_FIELD(ticket, field, values)  // Реализуйте этот макрос, а также необходимые операторы для классов Date и Time
+#define UPDATE_FIELD(ticket, field, values) if (values.find(#field) != values.end()) \
+                                            { \
+                                                istringstream is(values.at(#field)); \
+                                                is >> ticket.field; \
+                                            } \
+
+
+bool operator == (const Time& lsh, const Time& rsh)
+{
+    return (lsh.hours == rsh.hours) && (lsh.minutes == rsh.minutes);
+}
+
+
+ostream& operator << (ostream& os, const Time& time )
+{
+    return os << time.hours << ':' << time.minutes;
+}
+
+istream& operator >> (istream& is, Time& r)
+{
+  is >> r.hours;
+  is.ignore(1);
+  is >> r.minutes;
+
+   return is;
+}
+
+
+bool operator == (const Date& lsh, const Date& rsh)
+{
+    return (lsh.year == rsh.year) && (lsh.month == rsh.month) && (lsh.day == rsh.day);
+}
+
+ostream& operator << (ostream& os, const Date& date )
+{
+    return os << date.day << '-' << date.month << '-' << date.year;
+}
+
+istream& operator >> (istream& is, Date& r)
+{
+  is >> r.year;
+  is.ignore(1);
+  is >> r.month;
+  is.ignore(1);
+  is >> r.day;
+
+  return is;
+}
 
 void TestUpdate() {
   AirlineTicket t;
