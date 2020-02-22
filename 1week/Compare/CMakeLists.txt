@@ -1,8 +1,12 @@
-cmake_minimum_required(VERSION 3.14)
-project(sort_by)
+cmake_minimum_required(VERSION 2.8)	
 
-set(SOURCES sort_by.cpp )
-set(HEADERS airline_ticket.h test_runner.h)
-add_executable(main
-               ${SOURCES}
-               ${HEADERS})
+project(compare)
+
+set(SOURCE_EXE sort_by.cpp)
+
+set(HEADERS airline_ticket.h 
+            test_runner.h )
+
+
+add_executable(compare ${SOURCE_EXE}
+			${HEADERS})		
