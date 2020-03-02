@@ -7,12 +7,12 @@
 
 using namespace std;
 
-// Реализуйте шаблон класса Paginator
-
 template <typename Iterator>
-class Paginator {
+class Page
+{
 public:
-    Paginator (Iterator begin, Iterator end, size_t size) : first(begin), last(end), page_size(size)
+
+    Page (Iterator begin, Iterator end, size_t size) : first(begin), last(end)
     {}
 
     Iterator begin() const
@@ -27,6 +27,37 @@ public:
 
     size_t size() const
     {
+        return last - first;
+    }
+
+private:
+    Iterator first;
+    Iterator last;
+
+
+};
+
+template <typename Iterator>
+class Paginator
+{
+public:
+    Paginator (auto begin, auto  end, size_t size) : first(begin), last(end), page_size(size)
+    {
+
+    }
+
+    auto begin() const
+    {
+        return pages.begin();
+    }
+
+    auto end() const
+    {
+        return pages.end();
+    }
+
+    size_t size() const
+    {
         size_t res = (last - first) / page_size ;
         if((last - first) % page_size == 0 ) return res;
         return res + 1;
@@ -36,7 +67,7 @@ private:
     Iterator first;
     Iterator last;
     size_t page_size;
-
+    vector<Page<Iterator>> pages;
 };
 
 template <typename C>
@@ -55,7 +86,7 @@ void TestPageCounts() {
   ASSERT_EQUAL(Paginate(v, 150).size(), 1u);
   ASSERT_EQUAL(Paginate(v, 14).size(), 2u);
 }
-/*
+
 void TestLooping() {
   vector<int> v(15);
   iota(begin(v), end(v), 1);
@@ -71,7 +102,7 @@ void TestLooping() {
 
   ASSERT_EQUAL(os.str(), "1 2 3 4 5 6 \n7 8 9 10 11 12 \n13 14 15 \n");
 }
-
+/*
 void TestModification() {
   vector<string> vs = {"one", "two", "three", "four", "five"};
   for (auto page : Paginate(vs, 2)) {
@@ -137,9 +168,9 @@ void TestPagePagination() {
 
 int main() {
   TestRunner tr;
-  RUN_TEST(tr, TestPageCounts);
-  /*RUN_TEST(tr, TestLooping);
-  RUN_TEST(tr, TestModification);
+ // RUN_TEST(tr, TestPageCounts);
+  RUN_TEST(tr, TestLooping);
+/*  RUN_TEST(tr, TestModification);
   RUN_TEST(tr, TestPageSizes);
   RUN_TEST(tr, TestConstContainer);
   RUN_TEST(tr, TestPagePagination);*/
