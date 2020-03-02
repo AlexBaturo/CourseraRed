@@ -7,20 +7,20 @@
 
 using namespace std;
 
-template <typename Iterator>
+template <typename PageIter>
 class Page
 {
 public:
 
-    Page (Iterator begin, Iterator end, size_t size) : first(begin), last(end)
+    Page (PageIter begin, PageIter end) : first(begin), last(end)
     {}
 
-    Iterator begin() const
+    PageIter begin() const
     {
         return first;
     }
 
-    Iterator end() const
+    PageIter end() const
     {
         return last;
     }
@@ -31,8 +31,8 @@ public:
     }
 
 private:
-    Iterator first;
-    Iterator last;
+    PageIter first;
+    PageIter last;
 
 
 };
@@ -41,8 +41,14 @@ template <typename Iterator>
 class Paginator
 {
 public:
-    Paginator (auto begin, auto  end, size_t size) : first(begin), last(end), page_size(size)
+    Paginator (Iterator begin, Iterator  end, size_t  page_size) : first(begin), last(end), page_size_(page_size)
     {
+
+
+        for (size_t i = 0; i < size(); i++){
+           pages.push_back({first+page_size_*i, min(first+page_size_*(i+1), end)});
+        }
+
 
     }
 
@@ -58,15 +64,15 @@ public:
 
     size_t size() const
     {
-        size_t res = (last - first) / page_size ;
-        if((last - first) % page_size == 0 ) return res;
+        size_t res = (last - first) / page_size_ ;
+        if((last - first) % page_size_ == 0 ) return res;
         return res + 1;
     }
 
 private:
     Iterator first;
     Iterator last;
-    size_t page_size;
+    size_t page_size_;
     vector<Page<Iterator>> pages;
 };
 
@@ -98,6 +104,13 @@ void TestLooping() {
       os << x << ' ';
     }
     os << '\n';
+  }
+
+  for (const auto& page : paginate_v) {
+    for (int x : page) {
+      cout << x << ' ';
+    }
+    cout << '\n';
   }
 
   ASSERT_EQUAL(os.str(), "1 2 3 4 5 6 \n7 8 9 10 11 12 \n13 14 15 \n");
@@ -174,5 +187,6 @@ int main() {
   RUN_TEST(tr, TestPageSizes);
   RUN_TEST(tr, TestConstContainer);
   RUN_TEST(tr, TestPagePagination);*/
+
 }
 
