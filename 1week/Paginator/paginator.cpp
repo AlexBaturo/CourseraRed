@@ -31,8 +31,8 @@ public:
     }
 
 private:
-    PageIter first;
-    PageIter last;
+    const PageIter first;
+    const PageIter last;
 
 
 };
@@ -52,7 +52,7 @@ public:
 
     }
 
-    auto begin() const
+   auto begin() const
     {
         return pages.begin();
     }
@@ -70,16 +70,17 @@ public:
     }
 
 private:
-    Iterator first;
-    Iterator last;
+    const Iterator first;
+    const Iterator last;
     size_t page_size_;
     vector<Page<Iterator>> pages;
 };
 
 template <typename C>
-auto Paginate(C& c, size_t page_size) {
-    return Paginator<typename C::iterator> (c.begin(), c.end(), page_size);
+auto Paginate(C& c, const size_t& page_size) {
+    return Paginator(c.begin(), c.end(), page_size);
 }
+
 
 void TestPageCounts() {
   vector<int> v(15);
@@ -96,7 +97,6 @@ void TestPageCounts() {
 void TestLooping() {
   vector<int> v(15);
   iota(begin(v), end(v), 1);
-
   Paginator<vector<int>::iterator> paginate_v(v.begin(), v.end(), 6);
   ostringstream os;
   for (const auto& page : paginate_v) {
@@ -106,16 +106,9 @@ void TestLooping() {
     os << '\n';
   }
 
-  for (const auto& page : paginate_v) {
-    for (int x : page) {
-      cout << x << ' ';
-    }
-    cout << '\n';
-  }
-
   ASSERT_EQUAL(os.str(), "1 2 3 4 5 6 \n7 8 9 10 11 12 \n13 14 15 \n");
 }
-/*
+
 void TestModification() {
   vector<string> vs = {"one", "two", "three", "four", "five"};
   for (auto page : Paginate(vs, 2)) {
@@ -177,16 +170,16 @@ void TestPagePagination() {
       {19, 20, 21, 22}
   };
   ASSERT_EQUAL(lines, expected);
-}*/
+}
 
 int main() {
   TestRunner tr;
- // RUN_TEST(tr, TestPageCounts);
+  RUN_TEST(tr, TestPageCounts);
   RUN_TEST(tr, TestLooping);
-/*  RUN_TEST(tr, TestModification);
+  RUN_TEST(tr, TestModification);
   RUN_TEST(tr, TestPageSizes);
   RUN_TEST(tr, TestConstContainer);
-  RUN_TEST(tr, TestPagePagination);*/
+  RUN_TEST(tr, TestPagePagination);
 
 }
 
