@@ -4,8 +4,8 @@ project(leaner)
 
 set(SOURCE_EXE leaner.cpp)
 
-set(HEADERS ../profiler.h)
+set(HEADERS profiler.h)
 
 
-add_executable(compare ${SOURCE_EXE}
+add_executable(leaner ${SOURCE_EXE}
                         ${HEADERS})
